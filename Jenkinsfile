@@ -22,7 +22,7 @@ pipeline {
            steps {
                echo 'Notify GitLab'
                updateGitlabCommitStatus name: 'deploy', state: 'pending'
-               echo 'test step goes here'
+               echo 'Deploy step goes here'
                updateGitlabCommitStatus name: 'deploy', state: 'success'
 
            }
