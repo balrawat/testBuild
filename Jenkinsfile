@@ -11,7 +11,7 @@ pipeline {
     stage('Docker Build') {
       agent any
       steps {
-        sh 'docker build -t chrome:latest .'
+        sh '/usr/local/bin/docker build -t chrome:latest .'
       }
     }
     stage('Docker Push') {
