@@ -18,5 +18,14 @@ pipeline {
 
            }
        }
+       stage(deploy) {
+           steps {
+               echo 'Notify GitLab'
+               updateGitlabCommitStatus name: 'deploy', state: 'pending'
+               echo 'test step goes here'
+               updateGitlabCommitStatus name: 'deploy', state: 'success'
+
+           }
+       }
     }
  }
