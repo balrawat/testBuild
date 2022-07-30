@@ -1,31 +1,33 @@
+#!groovy
+
 pipeline {
-    agent any
-    stages {
-       stage('build') {
-          steps {
-             echo 'Notify GitLab'
-             updateGitlabCommitStatus name: 'build', state: 'pending'
-             echo 'build step goes here'
-             updateGitlabCommitStatus name: 'build', state: 'success'
-          }
-       }
-       stage(test) {
-           steps {
-               echo 'Notify GitLab'
-               updateGitlabCommitStatus name: 'test', state: 'pending'
-               echo 'test step goes here'
-               updateGitlabCommitStatus name: 'test', state: 'success'
-
-           }
-       }
-       stage(deploy) {
-           steps {
-               echo 'Notify GitLab'
-               updateGitlabCommitStatus name: 'deploy', state: 'pending'
-               echo 'Deploy step goes here'
-               updateGitlabCommitStatus name: 'deploy', state: 'success'
-
-           }
-       }
+  agent none
+  stages {
+    stage('Maven Install') {
+      agent {
+        docker {
+          image 'maven:3.5.0'
+        }
+      }
+      steps {
+        sh 'echo  install'
+      }
     }
- }
+    stage('Docker Build') {
+      agent any
+      steps {
+        sh 'docker build -t chrome:latest .'
+      }
+    }
+    stage('Docker Push') {
+      agent any
+      steps {
+        //withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+        //  sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+        //  sh 'docker push shanem/spring-petclinic:latest'
+        sh 'echo pushed'
+        }
+      }
+    }
+  }
+}
