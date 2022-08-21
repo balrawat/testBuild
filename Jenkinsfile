@@ -1,7 +1,5 @@
-#!groovy
-
-node {
-  agent any
+pipeline {
+    agent any
   stages {
     stage('Preparing Install') {
       steps {
