@@ -23,7 +23,7 @@ pipeline {
         //  sh 'docker push shanem/spring-petclinic:latest'
         sh """
             /usr/bin/aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 171109243224.dkr.ecr.ap-southeast-1.amazonaws.com
-            /bin/docker tag chrome:${env.BUILD_ID} 171109243224.dkr.ecr.ap-southeast-1.amazonaws.com/testrepo1:${env.BUILD_ID}
+            /bin/docker tag nginx:${env.BUILD_ID} 171109243224.dkr.ecr.ap-southeast-1.amazonaws.com/testrepo1:${env.BUILD_ID}
             /bin/docker push 171109243224.dkr.ecr.ap-southeast-1.amazonaws.com/testrepo1:${env.BUILD_ID}
             echo 'Image Pushed to Registry'
         """
