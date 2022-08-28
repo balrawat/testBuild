@@ -1,5 +1,6 @@
 pipeline {
     agent any
+    environment { SHORT_COMMIT = "${GIT_COMMIT[0..7]}" }
   stages {
     stage('Preparing Install') {
       steps {
@@ -9,9 +10,9 @@ pipeline {
     stage('Docker Build') {
       agent any
       steps {
-        //def customImage = docker.build("my-image:${env.GIT_COMMIT}")
+        //def customImage = docker.build("my-image:${env.SHORT_COMMIT}")
         sh """
-            /bin/docker build --network=host -t nginx:${env.GIT_COMMIT} .
+            /bin/docker build --network=host -t nginx:${env.SHORT_COMMIT} .
         """
       }
     }
@@ -23,8 +24,8 @@ pipeline {
         //  sh 'docker push shanem/spring-petclinic:latest'
         sh """
             /usr/bin/aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 171109243224.dkr.ecr.ap-southeast-1.amazonaws.com
-            /bin/docker tag nginx:${env.GIT_COMMIT} 171109243224.dkr.ecr.ap-southeast-1.amazonaws.com/testrepo1:${env.GIT_COMMIT}
-            /bin/docker push 171109243224.dkr.ecr.ap-southeast-1.amazonaws.com/testrepo1:${env.GIT_COMMIT}
+            /bin/docker tag nginx:${env.SHORT_COMMIT} 171109243224.dkr.ecr.ap-southeast-1.amazonaws.com/testrepo1:${env.SHORT_COMMIT}
+            /bin/docker push 171109243224.dkr.ecr.ap-southeast-1.amazonaws.com/testrepo1:${env.SHORT_COMMIT}
             echo 'Image Pushed to Registry'
         """
         //}
