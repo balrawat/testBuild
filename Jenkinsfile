@@ -34,6 +34,8 @@ pipeline {
           steps{
           sh"""
             /usr/local/bin/kubectl get po -A
+            /usr/local/bin/kubectl set image deployment nginx-deployment 171109243224.dkr.ecr.ap-southeast-1.amazonaws.com/testrepo1:${env.BUILD_ID}
+            
           """
           }
       }
