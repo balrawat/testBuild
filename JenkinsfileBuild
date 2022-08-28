@@ -24,7 +24,7 @@ pipeline {
         sh """
             /usr/bin/aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 171109243224.dkr.ecr.ap-southeast-1.amazonaws.com
             /bin/docker tag nginx:${env.GIT_COMMIT} 171109243224.dkr.ecr.ap-southeast-1.amazonaws.com/testrepo1:${env.GIT_COMMIT}
-            /bin/docker push 171109243224.dkr.ecr.ap-southeast-1.amazonaws.com/testrepo1:${env.BUILD_ID}
+            /bin/docker push 171109243224.dkr.ecr.ap-southeast-1.amazonaws.com/testrepo1:${env.GIT_COMMIT}
             echo 'Image Pushed to Registry'
         """
         //}
