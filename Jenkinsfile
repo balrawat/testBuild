@@ -30,6 +30,9 @@ pipeline {
         //}
       }
     }
+      stage('Deploy approval'){
+        input "Deploy to kubernetes?"
+      }
       stage('K8S Deployment') {
           steps{
           sh"""
