@@ -31,9 +31,11 @@ pipeline {
       }
     }
       stage('K8S Deployment') {
+          steps{
           sh"""
             /usr/local/bin/kubectl get po -A
           """
+          }
       }
   }
 }
