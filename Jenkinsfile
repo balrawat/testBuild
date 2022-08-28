@@ -1,5 +1,6 @@
 pipeline {
     agent any
+     environment { SHORT_COMMIT = "${GIT_COMMIT[0..7]}" }
   stages {
     stage('Preparing Install') {
       steps {
@@ -11,7 +12,7 @@ pipeline {
       steps {
         //def customImage = docker.build("my-image:${env.BUILD_ID}")
         sh """
-            /bin/docker build --network=host -t nginx:${env.BUILD_ID} .
+            /bin/docker build --network=host -t nginx:${env.SHORT_COMMIT} .
         """
       }
     }
@@ -23,8 +24,8 @@ pipeline {
         //  sh 'docker push shanem/spring-petclinic:latest'
         sh """
             /usr/bin/aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 171109243224.dkr.ecr.ap-southeast-1.amazonaws.com
-            /bin/docker tag nginx:${env.BUILD_ID} 171109243224.dkr.ecr.ap-southeast-1.amazonaws.com/testrepo1:${env.BUILD_ID}
-            /bin/docker push 171109243224.dkr.ecr.ap-southeast-1.amazonaws.com/testrepo1:${env.BUILD_ID}
+            /bin/docker tag nginx:${env.SHORT_COMMIT} 171109243224.dkr.ecr.ap-southeast-1.amazonaws.com/testrepo1:${env.SHORT_COMMIT}
+            /bin/docker push 171109243224.dkr.ecr.ap-southeast-1.amazonaws.com/testrepo1:${env.SHORT_COMMIT}
             echo 'Image Pushed to Registry'
         """
         //}
@@ -39,7 +40,7 @@ pipeline {
           steps{
           sh"""
             /usr/local/bin/kubectl get po -A
-            /usr/local/bin/kubectl set image deployment/nginx-deployment nginx-deployment=171109243224.dkr.ecr.ap-southeast-1.amazonaws.com/testrepo1:${env.BUILD_ID}
+            /usr/local/bin/kubectl set image deployment/nginx-deployment nginx-deployment=171109243224.dkr.ecr.ap-southeast-1.amazonaws.com/testrepo1:${env.SHORT_COMMIT}
             
           """
           }
